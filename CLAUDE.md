@@ -25,6 +25,9 @@ Remotes: `origin` is this PoC repo. `upstream` is the real app repo, read-only: 
 - Run the backend: needs MySQL 8 and `DB_USERNAME` / `DB_PASSWORD` as environment variables (never stored in the repo).
   PowerShell: `$env:DB_USERNAME="dailyrupi_app"; $env:DB_PASSWORD="..."; mvn spring-boot:run` from `backend/`. It listens on `127.0.0.1:8080`.
 - Frontend: `cd frontend && npm install && npm start`, then open http://localhost:4200 (it proxies `/api` to the backend).
+- Consumer-contract tests only (web frontend, Android sync): `cd backend && mvn test -Pcontract-tests`. Plain `mvn test` skips them.
+- Coverage: every backend test run writes `backend/target/site/jacoco/jacoco.xml`.
+- Security scan: `cd backend && mvn compile spotbugs:check` (FindSecBugs, security only; filters in `backend/config/spotbugs/`). Reports go to `target/spotbugsXml.xml` and `target/spotbugsSarif.json`.
 - Build the review engine: `mvn -f pr-review/pom.xml package`. Run it: `java -jar pr-review/target/pr-review.jar --version`.
 - More PoC commands are added here as each phase lands (see `docs/pr-review/PROGRESS.md`).
 

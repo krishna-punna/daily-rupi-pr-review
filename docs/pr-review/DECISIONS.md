@@ -20,6 +20,20 @@ Each entry: date, decision, why, alternatives considered.
   - REQ-API-001 also covers `core/auth.service.ts` (`GET /api/auth/me`).
 - **Why:** that is what `SecurityConfig` and the frontend actually do. A requirement that disagrees with the code would make the reviewer flag correct code.
 
+## 2026-10-15: Security scan settings
+- **Decision:** SpotBugs 4.10.4.1 with FindSecBugs 1.14.0. It reports the SECURITY category only, at threshold Medium, with `effort=Max`. One pattern is excluded: `SPRING_ENDPOINT` (it marks every controller method and is an inventory note, not a defect). It runs on demand with `mvn compile spotbugs:check`, not in `mvn test`.
+- **Why:** the scan must catch real injection bugs (proven: `SQL_INJECTION_SPRING_JDBC` is reported at Medium) without burying them in noise.
+- **Versions:** the newest releases at least two weeks old on 2026-10-15. spotbugs-maven-plugin 4.10.5.0 was 3 days old, so it was skipped.
+- **Open:** an existing finding on unchanged app code, `ENTITY_LEAK` in `AdminController.auditLog`, awaits the user's decision (see PROGRESS.md).
+
+## 2026-10-15: Contract checks reported by name
+- **Decision:** inside the `contract-tests` profile only, Surefire uses the JUnit 5 "phrased" XML reporter, so each dynamic check appears as `web-frontend: Expense list` rather than `[5]`.
+- **Why:** the engine (Phase 2) reads these reports to say which consumer and endpoint broke. Plain `mvn test` reports are unchanged.
+
+## 2026-10-15: `pr-review.yml` triggers in Phase 1
+- **Decision:** Phase 1 triggers only on `pull_request` (`opened`, `synchronize`, `reopened`, `ready_for_review`, `labeled`) to `main`, for changes under `backend/**`, `docs/requirements/**`, the policy file, or the workflow itself. `pull_request_review` and `workflow_dispatch` arrive with the engine in Phase 5.
+- **Why:** before the engine exists, they would only re-run the check jobs. The `labeled` type re-runs the checks on any label; that is acceptable for a PoC.
+
 ## 2026-10-15: Java 17 baseline for the engine
 - **Decision:** `pr-review/` targets Java 17, the same as `backend/`.
 - **Why:** the machine has JDK 17.0.12 only, and CI already uses 17. One JDK is enough.
