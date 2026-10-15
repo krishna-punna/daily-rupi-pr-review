@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="com.dailyrupi.DashboardTest" time="0.424" tests="5" errors="0" skipped="0" failures="0">
+  
+  <testcase name="daysStopAtTodayAndAFutureMonthHasNone" classname="com.dailyrupi.DashboardTest" time="0.096">
+    <system-out/>
+  </testcase>
+  <testcase name="pastMonthHasDailyTotalsComparisonPaymentMethodsAndTopItems" classname="com.dailyrupi.DashboardTest" time="0.263"/>
+  <testcase name="dashboardNeedsTheUserRole" classname="com.dailyrupi.DashboardTest" time="0.008"/>
+  <testcase name="emptyMonthIsAllZeros" classname="com.dailyrupi.DashboardTest" time="0.025"/>
+  <testcase name="badMonthIsRejected" classname="com.dailyrupi.DashboardTest" time="0.013"/>
+</testsuite>

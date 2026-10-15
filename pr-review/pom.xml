@@ -33,6 +33,15 @@
             <artifactId>picocli-spring-boot-starter</artifactId>
             <version>${picocli.version}</version>
         </dependency>
+        <!-- Jackson (with java.time) for reports and state; YAML for review-policy.yml. -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-json</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
