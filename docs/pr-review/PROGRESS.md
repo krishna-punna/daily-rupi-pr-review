@@ -20,9 +20,10 @@ Phases follow `POC_SPEC.md` §18. A box is ticked only when its Definition of Do
 - [x] JaCoCo XML report on every `test` run (`backend/target/site/jacoco/jacoco.xml`)
 - [x] Surefire excludes `contract` by default; `-Pcontract-tests` runs only them
 - [x] SpotBugs 4.10.4.1 + FindSecBugs 1.14.0 (SECURITY category, threshold Medium, `SPRING_ENDPOINT` excluded) via `mvn compile spotbugs:check`
-- [ ] **Waiting on the upstream fix:** the scan reports 1 existing finding on unchanged app code: `ENTITY_LEAK` (Medium) in `AdminController.auditLog` (`AdminController.java` lines 31–33).
-  - The user will fix it in the real `daily-rupi` app (return a DTO from the audit-log endpoint).
-  - Once that fix is merged upstream, merge `upstream/main` into this repo and re-run the scan (see DECISIONS.md). `sast` stays red until then.
+- [x] Existing finding resolved upstream. The scan had reported 1 finding on unchanged app code: `ENTITY_LEAK` (Medium) in `AdminController.auditLog`.
+  - Fixed in the real app by krishna-punna/daily-rupi#11 (merged 2026-10-15): the endpoint returns an `AuditEntry` record with the same six JSON fields.
+  - Brought in by merging `upstream/main` (`eceb894`) into this branch.
+  - After the sync: `mvn test` 35/35 pass, contract checks 13/13 pass, `spotbugs:check` 0 findings, `BUILD SUCCESS`.
 - [x] Proof on a local scratch branch (deleted afterwards):
   - Concatenated `JdbcTemplate` SQL is reported as `SQL_INJECTION_SPRING_JDBC` (Medium).
   - Renaming `ExpenseResponse.paymentMethodName` fails exactly 3 contract checks: `web-frontend: Expense list`, `web-frontend: Create expense`, `android-sync: Changes and deletions since a time`.

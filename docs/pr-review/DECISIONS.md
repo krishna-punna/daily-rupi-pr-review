@@ -24,9 +24,14 @@ Each entry: date, decision, why, alternatives considered.
 - **Decision:** SpotBugs 4.10.4.1 with FindSecBugs 1.14.0. It reports the SECURITY category only, at threshold Medium, with `effort=Max`. One pattern is excluded: `SPRING_ENDPOINT` (it marks every controller method and is an inventory note, not a defect). It runs on demand with `mvn compile spotbugs:check`, not in `mvn test`.
 - **Why:** the scan must catch real injection bugs (proven: `SQL_INJECTION_SPRING_JDBC` is reported at Medium) without burying them in noise.
 - **Versions:** the newest releases at least two weeks old on 2026-10-15. spotbugs-maven-plugin 4.10.5.0 was 3 days old, so it was skipped.
-- **Existing finding:** `ENTITY_LEAK` in `AdminController.auditLog` (the endpoint returns the `AuditLog` JPA entity).
+- **Existing finding:** `ENTITY_LEAK` in `AdminController.auditLog` (the endpoint returned the `AuditLog` JPA entity).
   - The user chose to fix it in the real `daily-rupi` app rather than add an exclusion here.
-  - It comes into this repo by merging `upstream/main`, not by editing app code in the PoC copy. `sast` stays red on `main` until then.
+  - Fixed in krishna-punna/daily-rupi#11 (returns an `AuditEntry` record with the same six JSON fields).
+  - Merged into this repo from `upstream/main` (`eceb894`) on 2026-10-15. No exclusions were needed.
+
+## 2026-10-15: Commit identity
+- **Decision:** this folder (and the fix folder used for daily-rupi#11) uses the repo-local Git identity `krishna-punna <64274358+krishna-punna@users.noreply.github.com>`, matching the author of the user's earlier daily-rupi commits. The machine's global identity (`kittulal`) is unchanged.
+- **Open:** the five PoC commits made before this change (`07920d9` through `41803af`) are authored as `kittulal`. They are unpushed, so they can be re-authored before the first push if the user wants.
 
 ## 2026-10-15: Bringing upstream app changes into the PoC copy
 - **Decision:** app changes are made in `krishna-punna/daily-rupi`, then merged into this repo with a normal merge commit (never a rebase of pushed branches):
