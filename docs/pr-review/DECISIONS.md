@@ -24,7 +24,17 @@ Each entry: date, decision, why, alternatives considered.
 - **Decision:** SpotBugs 4.10.4.1 with FindSecBugs 1.14.0. It reports the SECURITY category only, at threshold Medium, with `effort=Max`. One pattern is excluded: `SPRING_ENDPOINT` (it marks every controller method and is an inventory note, not a defect). It runs on demand with `mvn compile spotbugs:check`, not in `mvn test`.
 - **Why:** the scan must catch real injection bugs (proven: `SQL_INJECTION_SPRING_JDBC` is reported at Medium) without burying them in noise.
 - **Versions:** the newest releases at least two weeks old on 2026-10-15. spotbugs-maven-plugin 4.10.5.0 was 3 days old, so it was skipped.
-- **Open:** an existing finding on unchanged app code, `ENTITY_LEAK` in `AdminController.auditLog`, awaits the user's decision (see PROGRESS.md).
+- **Existing finding:** `ENTITY_LEAK` in `AdminController.auditLog` (the endpoint returns the `AuditLog` JPA entity).
+  - The user chose to fix it in the real `daily-rupi` app rather than add an exclusion here.
+  - It comes into this repo by merging `upstream/main`, not by editing app code in the PoC copy. `sast` stays red on `main` until then.
+
+## 2026-10-15: Bringing upstream app changes into the PoC copy
+- **Decision:** app changes are made in `krishna-punna/daily-rupi`, then merged into this repo with a normal merge commit (never a rebase of pushed branches):
+  1. `git fetch upstream`
+  2. `git switch main`, then `git merge --ff-only upstream/main` (local `main` tracks `upstream/main`)
+  3. Update each open `poc/*` branch with `git merge main`
+- **Why:** the PoC must never diverge from the real app by editing app code, so reviews stay about real code. Merging keeps history intact for branches that are already pushed.
+- **After each sync:** re-run `mvn test`, `mvn test -Pcontract-tests`, and `mvn compile spotbugs:check`. From Phase 4 on, also check the demo overlays (spec §14).
 
 ## 2026-10-15: Contract checks reported by name
 - **Decision:** inside the `contract-tests` profile only, Surefire uses the JUnit 5 "phrased" XML reporter, so each dynamic check appears as `web-frontend: Expense list` rather than `[5]`.
