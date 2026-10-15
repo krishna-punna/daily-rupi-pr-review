@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="com.dailyrupi.contract.ConsumerContractTest" time="26.132" tests="13" errors="0" skipped="0" failures="3">
+  
+  <testcase name="everyConsumerGetsTheFieldsItReads() android-sync: First full fetch from a day" classname="com.dailyrupi.contract.ConsumerContractTest" time="0.059">
+    <system-out/>
+  </testcase>
+  <testcase name="everyConsumerGetsTheFieldsItReads() android-sync: Changes and deletions since a time" classname="com.dailyrupi.contract.ConsumerContractTest" time="0.041">
+    <failure message="[contract problems for GET /api/expenses/changes?since=2000-01-01T00:00:00] &#10;Expecting empty but was: [&quot;expenses[].paymentMethodName is missing&quot;]" type="java.lang.AssertionError"><![CDATA[java.lang.AssertionError: 
+[contract problems for GET /api/expenses/changes?since=2000-01-01T00:00:00] 
+Expecting empty but was: ["expenses[].paymentMethodName is missing"]
+	at com.dailyrupi.contract.ConsumerContractTest.check(ConsumerContractTest.java:109)
+	at com.dailyrupi.contract.ConsumerContractTest.lambda$everyConsumerGetsTheFieldsItReads$0(ConsumerContractTest.java:79)
+	at java.base/java.util.Optional.ifPresent(Optional.java:178)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+]]></failure>
+  </testcase>
+  <testcase name="everyConsumerGetsTheFieldsItReads() android-sync: Create with a client id" classname="com.dailyrupi.contract.ConsumerContractTest" time="0.044"/>
+  <testcase name="everyConsumerGetsTheFieldsItReads() web-frontend: Current user" classname="com.dailyrupi.contract.ConsumerContractTest" time="0.01"/>
+  <testcase name="everyConsumerGetsTheFieldsItReads() web-frontend: Master data tree" classname="com.dailyrupi.contract.ConsumerContractTest" time="0.053"/>
+  <testcase name="everyConsumerGetsTheFieldsItReads() web-frontend: Payment methods" classname="com.dailyrupi.contract.ConsumerContractTest" time="0.01"/>
+  <testcase name="everyConsumerGetsTheFieldsItReads() web-frontend: Expense list" classname="com.dailyrupi.contract.ConsumerContractTest" time="0.033">
+    <failure message="[contract problems for GET /api/expenses?page=0&amp;size=20] &#10;Expecting empty but was: [&quot;content[].paymentMethodName is missing&quot;]" type="java.lang.AssertionError"><![CDATA[java.lang.AssertionError: 
+[contract problems for GET /api/expenses?page=0&size=20] 
+Expecting empty but was: ["content[].paymentMethodName is missing"]
+	at com.dailyrupi.contract.ConsumerContractTest.check(ConsumerContractTest.java:109)
+	at com.dailyrupi.contract.ConsumerContractTest.lambda$everyConsumerGetsTheFieldsItReads$0(ConsumerContractTest.java:79)
+	at java.base/java.util.Optional.ifPresent(Optional.java:178)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+]]></failure>
+  </testcase>
+  <testcase name="everyConsumerGetsTheFieldsItReads() web-frontend: Create expense" classname="com.dailyrupi.contract.ConsumerContractTest" time="0.031">
+    <failure message="[contract problems for POST /api/expenses] &#10;Expecting empty but was: [&quot;paymentMethodName is missing&quot;]" type="java.lang.AssertionError"><![CDATA[java.lang.AssertionError: 
+[contract problems for POST /api/expenses] 
+Expecting empty but was: ["paymentMethodName is missing"]
+	at com.dailyrupi.contract.ConsumerContractTest.check(ConsumerContractTest.java:109)
+	at com.dailyrupi.contract.ConsumerContractTest.lambda$everyConsumerGetsTheFieldsItReads$0(ConsumerContractTest.java:79)
+	at java.base/java.util.Optional.ifPresent(Optional.java:178)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+]]></failure>
+  </testcase>
+  <testcase name="everyConsumerGetsTheFieldsItReads() web-frontend: Expense summary" classname="com.dailyrupi.contract.ConsumerContractTest" time="0.027"/>
+  <testcase name="everyConsumerGetsTheFieldsItReads() web-frontend: Month budget" classname="com.dailyrupi.contract.ConsumerContractTest" time="0.017"/>
+  <testcase name="everyConsumerGetsTheFieldsItReads() web-frontend: Set a budget" classname="com.dailyrupi.contract.ConsumerContractTest" time="0.032"/>
+  <testcase name="everyConsumerGetsTheFieldsItReads() web-frontend: Copy last month&apos;s budgets" classname="com.dailyrupi.contract.ConsumerContractTest" time="0.03"/>
+  <testcase name="everyConsumerGetsTheFieldsItReads() web-frontend: Month dashboard" classname="com.dailyrupi.contract.ConsumerContractTest" time="0.06"/>
+</testsuite>

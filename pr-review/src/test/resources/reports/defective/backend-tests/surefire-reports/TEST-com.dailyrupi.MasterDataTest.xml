@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="com.dailyrupi.MasterDataTest" time="0.16" tests="6" errors="0" skipped="0" failures="0">
+  
+  <testcase name="anonymousCannotReadMasterData" classname="com.dailyrupi.MasterDataTest" time="0.018">
+    <system-out/>
+  </testcase>
+  <testcase name="seededTreeIsReturned" classname="com.dailyrupi.MasterDataTest" time="0.037"/>
+  <testcase name="customEntriesCanBeAddedAtEveryLevel" classname="com.dailyrupi.MasterDataTest" time="0.04"/>
+  <testcase name="writesWithoutCsrfTokenAreForbidden" classname="com.dailyrupi.MasterDataTest" time="0.008"/>
+  <testcase name="temporaryPasswordCannotReadMasterData" classname="com.dailyrupi.MasterDataTest" time="0.011"/>
+  <testcase name="markupInNamesIsRejected" classname="com.dailyrupi.MasterDataTest" time="0.011"/>
+</testsuite>

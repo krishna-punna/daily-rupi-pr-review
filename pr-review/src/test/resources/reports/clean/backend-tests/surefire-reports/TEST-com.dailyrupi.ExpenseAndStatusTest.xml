@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="com.dailyrupi.ExpenseAndStatusTest" time="1.524" tests="5" errors="0" skipped="0" failures="0">
+  
+  <testcase name="expenseCanBeAddedEditedListedAndDeleted" classname="com.dailyrupi.ExpenseAndStatusTest" time="0.295">
+    <system-out/>
+  </testcase>
+  <testcase name="inactiveEntriesAreHiddenFromDropdownsButNotFromManagement" classname="com.dailyrupi.ExpenseAndStatusTest" time="0.201"/>
+  <testcase name="summaryTotalsTodayWeekAndMonth" classname="com.dailyrupi.ExpenseAndStatusTest" time="0.514"/>
+  <testcase name="renameStatusAndDeleteWorkAtEveryLevel" classname="com.dailyrupi.ExpenseAndStatusTest" time="0.298"/>
+  <testcase name="futureDatesAndBadAmountsAreRejected" classname="com.dailyrupi.ExpenseAndStatusTest" time="0.181"/>
+</testsuite>

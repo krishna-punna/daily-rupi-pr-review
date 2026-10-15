@@ -30,14 +30,18 @@ Each entry: date, decision, why, alternatives considered.
   - Merged into this repo from `upstream/main` (`eceb894`) on 2026-10-15. No exclusions were needed.
 
 ## 2026-10-15: Commit identity
-- **Decision:** this folder (and the fix folder used for daily-rupi#11) uses the repo-local Git identity `krishna-punna <64274358+krishna-punna@users.noreply.github.com>`, matching the author of the user's earlier daily-rupi commits. The machine's global identity (`kittulal`) is unchanged.
-- **Open:** the five PoC commits made before this change (`07920d9` through `41803af`) are authored as `kittulal`. They are unpushed, so they can be re-authored before the first push if the user wants.
+- **Decision:** this folder (and the fix folder used for daily-rupi#11) uses the repo-local Git identity `krishna-punna <64274358+krishna-punna@users.noreply.github.com>`, matching the author of the user's earlier daily-rupi commits. The machine's global Git identity is unchanged.
+- **Resolved:** the PoC commits made before this change were re-authored as `krishna-punna` before the first push, so every commit in this repo has that author.
 
 ## 2026-10-15: Bringing upstream app changes into the PoC copy
-- **Decision:** app changes are made in `krishna-punna/daily-rupi`, then merged into this repo with a normal merge commit (never a rebase of pushed branches):
-  1. `git fetch upstream`
-  2. `git switch main`, then `git merge --ff-only upstream/main` (local `main` tracks `upstream/main`)
-  3. Update each open `poc/*` branch with `git merge main`
+- **Decision:** app changes are made in `krishna-punna/daily-rupi`, then merged into this repo with a normal merge commit (never a rebase of pushed branches).
+  - Since Phases 0–1 were merged (2026-10-15), local `main` tracks `origin/main` (the PoC repo), which is ahead of upstream. To bring in app changes:
+    1. `git fetch upstream`
+    2. `git switch -c sync/upstream-<date> origin/main`
+    3. `git merge upstream/main`
+    4. Push and merge it as a normal PR, so the PoC checks run on it
+    5. Merge `main` into any open `poc/*` branch
+  - Before Phases 0–1 were merged, the procedure was `git merge --ff-only upstream/main` on a `main` that tracked upstream.
 - **Why:** the PoC must never diverge from the real app by editing app code, so reviews stay about real code. Merging keeps history intact for branches that are already pushed.
 - **After each sync:** re-run `mvn test`, `mvn test -Pcontract-tests`, and `mvn compile spotbugs:check`. From Phase 4 on, also check the demo overlays (spec §14).
 
@@ -48,6 +52,21 @@ Each entry: date, decision, why, alternatives considered.
 ## 2026-10-15: `pr-review.yml` triggers in Phase 1
 - **Decision:** Phase 1 triggers only on `pull_request` (`opened`, `synchronize`, `reopened`, `ready_for_review`, `labeled`) to `main`, for changes under `backend/**`, `docs/requirements/**`, the policy file, or the workflow itself. `pull_request_review` and `workflow_dispatch` arrive with the engine in Phase 5.
 - **Why:** before the engine exists, they would only re-run the check jobs. The `labeled` type re-runs the checks on any label; that is acceptable for a PoC.
+
+## 2026-10-15: Phase 2 engine design choices
+- **Policy file has a `project` section.** Spec §11.1 shows only the policy keys. The file also says where the reviewed module, source root and contracts live, and how to run each check with Maven, mirroring `pr-review.yml`. Every key is required and unknown keys are rejected, so a typo cannot silently weaken the policy.
+- **What becomes a finding:**
+  - SAST issues: CONFIRMED when they touch the PR's changed lines (±3), PRE_EXISTING otherwise.
+  - Consumer-contract failures: one finding per consumer endpoint, with the lost field as evidence.
+  - Coverage: a finding only when a changed file has 3 or more coverable lines and none covered. Partly covered code is left to the W2 diff-coverage warning, to avoid noise.
+  - Ordinary unit-test failures: listed in the check's detail (and block through R2), not duplicated as findings.
+- **SAST severities:** injection rules are HIGH (CRITICAL at FindSecBugs priority 1). Other rules follow FindSecBugs priority: 1 HIGH, 2 MEDIUM, 3 LOW.
+- **No coverage when tests fail.** JaCoCo's report runs after Surefire in the `test` phase, so a failing test run leaves no `jacoco.xml`. CI behaves the same way. The report then says diff coverage is unknown instead of guessing. Such a PR is NOT_READY through R2 anyway.
+- **Local check results come from Maven exit codes**, the same signal CI uses. `--reports-dir` instead infers results from the reports alone, and a folder with no readable report is MISSING. GitHub mode (Phase 5) will read the Checks API instead.
+- **Merge conflicts (R4) are not checked yet**; the input is "unknown", which never fires R4. Approvals are unknown in local runs, so they count as not given (R7).
+- **Console output is plain ASCII**, because Windows consoles often cannot show the Markdown's status symbols. The `.md` file keeps them for GitHub.
+- **Test fixtures are real reports, sanitised.** They come from a scratch branch (concatenated `JdbcTemplate` SQL plus a renamed `paymentMethodName`) and from `main`. Machine paths, system properties, logs and JaCoCo session ids were stripped, because the repo is public.
+- **Engine CI is its own workflow** (`pr-review-engine.yml`), so engine-only changes don't re-run the app's checks and the engine's tests are not mistaken for an app check.
 
 ## 2026-10-15: Java 17 baseline for the engine
 - **Decision:** `pr-review/` targets Java 17, the same as `backend/`.

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="com.dailyrupi.ExpenseAndStatusTest" time="0.692" tests="5" errors="0" skipped="0" failures="1">
+  
+  <testcase name="expenseCanBeAddedEditedListedAndDeleted" classname="com.dailyrupi.ExpenseAndStatusTest" time="0.083">
+    <failure message="No value at JSON path &quot;$.paymentMethodName&quot;" type="java.lang.AssertionError"><![CDATA[java.lang.AssertionError: No value at JSON path "$.paymentMethodName"
+	at org.springframework.test.util.JsonPathExpectationsHelper.evaluateJsonPath(JsonPathExpectationsHelper.java:351)
+	at org.springframework.test.util.JsonPathExpectationsHelper.assertValue(JsonPathExpectationsHelper.java:148)
+	at org.springframework.test.web.servlet.result.JsonPathResultMatchers.lambda$value$2(JsonPathResultMatchers.java:112)
+	at org.springframework.test.web.servlet.MockMvc$1.andExpect(MockMvc.java:214)
+	at com.dailyrupi.ExpenseAndStatusTest.expenseCanBeAddedEditedListedAndDeleted(ExpenseAndStatusTest.java:156)
+	at java.base/java.lang.reflect.Method.invoke(Method.java:568)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+	at java.base/java.util.ArrayList.forEach(ArrayList.java:1511)
+Caused by: com.jayway.jsonpath.PathNotFoundException: No results for path: $['paymentMethodName']
+]]></failure>
+    <system-out/>
+  </testcase>
+  <testcase name="inactiveEntriesAreHiddenFromDropdownsButNotFromManagement" classname="com.dailyrupi.ExpenseAndStatusTest" time="0.136"/>
+  <testcase name="summaryTotalsTodayWeekAndMonth" classname="com.dailyrupi.ExpenseAndStatusTest" time="0.268"/>
+  <testcase name="renameStatusAndDeleteWorkAtEveryLevel" classname="com.dailyrupi.ExpenseAndStatusTest" time="0.095"/>
+  <testcase name="futureDatesAndBadAmountsAreRejected" classname="com.dailyrupi.ExpenseAndStatusTest" time="0.084"/>
+</testsuite>

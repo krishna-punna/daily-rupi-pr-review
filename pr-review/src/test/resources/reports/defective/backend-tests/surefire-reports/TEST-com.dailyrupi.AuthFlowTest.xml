@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="com.dailyrupi.AuthFlowTest" time="28.494" tests="8" errors="0" skipped="0" failures="0">
+  
+  <testcase name="loginWithoutCsrfTokenIsForbidden" classname="com.dailyrupi.AuthFlowTest" time="1.25">
+    <system-out/>
+  </testcase>
+  <testcase name="anonymousRequestsAreRejected" classname="com.dailyrupi.AuthFlowTest" time="0.172">
+    <system-out/>
+  </testcase>
+  <testcase name="weakNewPasswordIsRejected" classname="com.dailyrupi.AuthFlowTest" time="0.761">
+    <system-out/>
+  </testcase>
+  <testcase name="wrongPasswordAndUnknownUserGetTheSameAnswer" classname="com.dailyrupi.AuthFlowTest" time="0.329">
+    <system-out/>
+  </testcase>
+  <testcase name="csrfEndpointIsPublic" classname="com.dailyrupi.AuthFlowTest" time="0.11">
+    <system-out/>
+  </testcase>
+  <testcase name="accountLocksAfterFiveFailures" classname="com.dailyrupi.AuthFlowTest" time="0.593">
+    <system-out/>
+  </testcase>
+  <testcase name="defaultAdminMustChangePasswordBeforeAnythingElseWorks" classname="com.dailyrupi.AuthFlowTest" time="0.779">
+    <system-out/>
+  </testcase>
+  <testcase name="logoutEndsTheSession" classname="com.dailyrupi.AuthFlowTest" time="0.233">
+    <system-out/>
+  </testcase>
+</testsuite>

@@ -1,0 +1,46 @@
+# Merge-readiness policy for the PR review PoC (docs/pr-review/POC_SPEC.md §11).
+# Versioned: every analysis records policyVersion. Unknown keys are rejected when the file is loaded.
+policyVersion: 1.0.0
+
+# Files the review covers.
+reviewPaths:
+  - backend/src/main/**
+  - backend/src/test/**
+
+# Checks that must have passed. Names match the jobs in .github/workflows/pr-review.yml.
+# A missing, running or errored check never counts as passed (rule R3).
+requiredChecks: [backend-tests, contract-tests, sast]
+
+blockingSeverity: HIGH        # CONFIRMED / UNRESOLVED / REGRESSED at or above this blocks (R5)
+investigationSeverity: HIGH   # NEEDS_REVIEW at or above this needs investigation (R6)
+diffCoverageWarnBelow: 0.60   # warning (W2) when tests cover less of the changed code than this
+requiredApprovals: 1
+requireAiReview: false        # if true, AI unavailable => NEEDS_INVESTIGATION (never NOT_READY, never READY)
+enforcement: advisory         # advisory: check run "neutral"; required: "failure" unless ready/eligible
+
+# AI review costs money, so it runs only for these PRs. Deterministic checks always run.
+aiReviewTrigger:
+  branchPrefixes: ["demo/"]
+  label: ai-review
+
+# Where this repository keeps the reviewed code, and how to run each check locally the way CI runs it.
+project:
+  moduleDir: backend
+  sourceRoot: backend/src/main/java
+  contractTestClass: com.dailyrupi.contract.ConsumerContractTest
+  contractsDir: backend/src/test/resources/contracts/consumers
+  noCoverageMinLines: 3
+  checks:
+    backend-tests:
+      mavenArgs: [test]
+      reports:
+        surefire: target/surefire-reports
+        jacoco: target/site/jacoco/jacoco.xml
+    contract-tests:
+      mavenArgs: [test, -Pcontract-tests]
+      reports:
+        surefire: target/surefire-reports
+    sast:
+      mavenArgs: [compile, "spotbugs:check"]
+      reports:
+        spotbugs: target/spotbugsXml.xml

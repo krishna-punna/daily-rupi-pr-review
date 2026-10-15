@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="com.dailyrupi.ExpenseSyncTest" time="0.905" tests="4" errors="0" skipped="0" failures="0">
+  
+  <testcase name="listAndFirstFetchCanBeLimitedToDays" classname="com.dailyrupi.ExpenseSyncTest" time="0.321">
+    <system-out/>
+  </testcase>
+  <testcase name="retriedCreateWithTheSameClientIdIsSavedOnce" classname="com.dailyrupi.ExpenseSyncTest" time="0.173"/>
+  <testcase name="changesReturnsOnlyWhatChangedIncludingDeletions" classname="com.dailyrupi.ExpenseSyncTest" time="0.287"/>
+  <testcase name="webExpensesHaveNoClientIdAndBadClientIdsAreRefused" classname="com.dailyrupi.ExpenseSyncTest" time="0.094"/>
+</testsuite>

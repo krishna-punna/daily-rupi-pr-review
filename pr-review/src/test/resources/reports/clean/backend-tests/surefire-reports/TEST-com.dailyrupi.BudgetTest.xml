@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="com.dailyrupi.BudgetTest" time="2.285" tests="7" errors="0" skipped="0" failures="0">
+  
+  <testcase name="copyFromPreviousMonthKeepsBudgetsAlreadySet" classname="com.dailyrupi.BudgetTest" time="0.931">
+    <system-out/>
+  </testcase>
+  <testcase name="budgetCanBeRemoved" classname="com.dailyrupi.BudgetTest" time="0.212"/>
+  <testcase name="budgetsNeedTheUserRole" classname="com.dailyrupi.BudgetTest" time="0.022"/>
+  <testcase name="inactiveCategoryCannotGetANewBudgetButKeepsAnExistingOne" classname="com.dailyrupi.BudgetTest" time="0.27"/>
+  <testcase name="badInputIsRejected" classname="com.dailyrupi.BudgetTest" time="0.116"/>
+  <testcase name="deletingACategoryRemovesItsBudgets" classname="com.dailyrupi.BudgetTest" time="0.115"/>
+  <testcase name="budgetShowsSpendingForThatMonthOnly" classname="com.dailyrupi.BudgetTest" time="0.572"/>
+</testsuite>
