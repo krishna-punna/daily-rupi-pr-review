@@ -1,6 +1,7 @@
 # PR Review Intelligence & Clean Merge — PoC Specification for `daily-rupi`
 
-> **Version:** 1.1 (2026-10-15) · **Repository:** https://github.com/krishna-punna/daily-rupi (public, default branch `main`)
+> **Version:** 1.2 (2026-10-15) · **PoC repository:** https://github.com/krishna-punna/daily-rupi-pr-review (public, default branch `main`)
+> **Upstream app repository:** https://github.com/krishna-punna/daily-rupi. The PoC repo is a copy of it taken at `a1478b2` (full history) plus the PoC. The PoC never pushes to, opens PRs on, or changes settings of the upstream repo; the local clone has its `upstream` push URL disabled.
 > **Place this file at:** `docs/pr-review/POC_SPEC.md`
 > **Derived from:** *AI-Powered PR Review Intelligence & Clean Merge Platform* (solution design v1.0) and *AI Code Review Example* (PoC guidance).
 > **The application under review is the existing Daily Rupi backend** (`backend/`: Spring Boot 3.5.6, Java 17, JPA + Flyway, MySQL in production, H2 in tests, Spring Security). The review engine is a **new, separate** Maven project in `pr-review/`. The PoC only adds files to the app; it must not change how the app runs.
@@ -86,7 +87,7 @@ The PoC must demonstrate these six capabilities:
 ## 5. Repository layout (new items marked ✚)
 
 ```
-daily-rupi/
+daily-rupi-pr-review/                  (copy of daily-rupi + the PoC)
 ├── CLAUDE.md                          ✚ Claude Code memory: app + PoC commands, conventions, rules
 ├── README.md                          (existing; add one short section linking to pr-review/README.md)
 ├── backend/                           (existing app = application under review)
@@ -226,7 +227,7 @@ The engine reviews only files under the configured `reviewPaths` (default `backe
 {
   "findingId": "F-001",
   "fingerprint": "sha1:3f2a…",
-  "repository": "krishna-punna/daily-rupi",
+  "repository": "krishna-punna/daily-rupi-pr-review",
   "pullRequest": 12,
   "category": "SECURITY/SQL_INJECTION",
   "severity": "HIGH",
@@ -480,13 +481,13 @@ Input: open canonical findings (ID, title, location) and new human review commen
   - `workflow_dispatch` with a `pr_number` input.
   - **Never `pull_request_target`.**
 - **Check jobs (Java 17, Maven cache):** `backend-tests` (`mvn -B test` + JaCoCo), `contract-tests` (contract tag only), and `sast` (`spotbugs:check` with FindSecBugs). Set each job's `name:` equal to its ID so the check names match `requiredChecks`, and have each upload its reports as artifacts.
-- **Engine job:** `pr-review` uses `needs` on all three with `if: always()`, and runs only when the head branch starts with `demo/` or the PR has the `ai-review` label. Your existing `claude/*` PRs are not AI-reviewed unless you add the label. It downloads the reports, builds the engine with `mvn -B -f pr-review/pom.xml package -DskipTests`, runs `review github --pr <n>`, and publishes the results.
+- **Engine job:** `pr-review` uses `needs` on all three with `if: always()`, and runs only when the head branch starts with `demo/` or the PR has the `ai-review` label (cost control: phase PRs that build the PoC itself are not AI-reviewed unless labelled). It downloads the reports, builds the engine with `mvn -B -f pr-review/pom.xml package -DskipTests`, runs `review github --pr <n>`, and publishes the results.
 - On `pull_request_review` events, skip the check jobs. The engine reuses the stored analysis for the same head SHA (no new LLM calls), re-reads check conclusions and approvals through the API, and recomputes readiness.
 - **Permissions (least privilege):** `contents: read`, `pull-requests: write`, `issues: write`, `checks: write`.
 - **Concurrency:** group `pr-review-<pr number>`, `cancel-in-progress: true`.
 - **Actions** pinned to full commit SHAs (resolve them with `gh api`; keep the tag in a comment).
 - **Secrets:** `ANTHROPIC_API_KEY` from repository secrets. If it is absent, run deterministic-only and set `aiStatus=SKIPPED`, which is shown clearly.
-- **This repository is public:** demo PRs, AI comments, and the deliberately vulnerable demo code are visible to anyone. The app only listens on `127.0.0.1`, and demo code is never merged, so the risk is low. Still, `demo reset` must close the demo PRs and delete the demo branches after each demo.
+- **The PoC repository is public:** demo PRs, AI comments, and the deliberately vulnerable demo code are visible to anyone. They live only in `daily-rupi-pr-review`, never in the upstream app repo. The app only listens on `127.0.0.1`, and demo code is never merged, so the risk is low. Still, `demo reset` must close the demo PRs and delete the demo branches after each demo.
 
 ### 13.2 What the PR shows
 
@@ -589,7 +590,7 @@ PR adds a `yesterday` total to `ExpenseSummary` (additive, so the frontend and A
 - `demo setup`: creates the `demo/*` branches from `main`, applies the first commit of each scenario, pushes, and opens PRs with `gh`.
 - `demo next <scenario>`: applies and pushes the next commit (A → B1 → B2).
 - `demo comment D`: posts Scenario D's human comments.
-- `demo reset --yes`: closes demo PRs and deletes `demo/*` branches (local and remote), then clears demo state. It only ever touches `demo/*`; your `claude/*`, `main`, and `main_v1` branches are never touched.
+- `demo reset --yes`: closes demo PRs and deletes `demo/*` branches (local and remote), then clears demo state. It only ever touches `demo/*` in the PoC repo; `main`, the `poc/*` branches, and the upstream repo are never touched.
 
 ---
 
@@ -620,7 +621,7 @@ The report must state sample size and limitations plainly. A handful of scenario
 
 ```
 review local  --repo <path> --base <ref> --head <ref> [--pr-id <n>] [--mode live|record|replay] [--max-cost-usd 2.0]
-review github --pr <n> [--repo krishna-punna/daily-rupi] [--reports-dir <dir>] [--publish] [--mode live|replay]
+review github --pr <n> [--repo krishna-punna/daily-rupi-pr-review] [--reports-dir <dir>] [--publish] [--mode live|replay]
 demo   local|setup|next|comment|reset ...
 eval   --mode replay|live [--runs N]
 serve  [--port 8090] [--state-dir .ai-review/state]   # 8090, because the app itself uses 8080

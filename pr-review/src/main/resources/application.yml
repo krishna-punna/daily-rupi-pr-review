@@ -1,0 +1,9 @@
+spring:
+  main:
+    # A command-line tool; the `serve` subcommand (Phase 6) will start a web server explicitly.
+    web-application-type: none
+    banner-mode: off
+
+logging:
+  level:
+    root: warn   # keep command output readable; Spring's startup lines are INFO
