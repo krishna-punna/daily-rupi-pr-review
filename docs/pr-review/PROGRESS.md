@@ -38,7 +38,32 @@ Phases follow `POC_SPEC.md` §18. A box is ticked only when its Definition of Do
 **Phase 0 merged as PR #1, Phase 1 as PR #2 (2026-10-15).** Before the first push, every PoC commit was re-authored as `krishna-punna` and Phase 1 was rebased onto `main`.
 
 ## Phase 2: Engine core, no LLM (branch `poc/phase-2-engine-core`)
-- [ ] Not started. Waiting for the user's "continue"
+- [x] Domain model:
+  - fixed taxonomy (`Category`), `Severity`, `FindingStatus`, `EvidenceLevel`
+  - `Finding` with builder, and `FindingSource` (only tool, test, contract and coverage sources count as independent evidence)
+  - line-independent `Fingerprint`
+- [x] `UnifiedDiffParser`, which reads hunks by their line counts, not by line prefixes; `ChangedLines` with ±3 tolerance
+- [x] `GitCli` and `LocalGitPrSource`: diff from the merge base; the current head is re-read for R1
+- [x] Report parsers for SpotBugs/FindSecBugs XML, Surefire XML and JaCoCo XML. The XML reader never resolves external entities or DTDs
+- [x] `DiffCoverage`: covered changed lines ÷ changed lines that hold code
+- [x] `ToolFindingNormalizer`:
+  - A SAST issue in the changed lines is CONFIRMED; one outside them is PRE_EXISTING.
+  - Each broken consumer contract becomes its own finding, naming the field that was lost.
+  - A changed file with 3 or more coverable lines and 0 covered becomes a TEST finding.
+  - Findings are numbered F-001… with blocking ones first.
+- [x] `review-policy.yml` with a `project` section (check commands mirror CI). `PolicyLoader` rejects missing or unknown keys
+- [x] `ReadinessEngine`: a pure function implementing R1–R8 and W1–W5. Table-driven tests: 31 rows plus 2 more tests, none of them demo scenarios
+- [x] `LocalCheckRunner`: runs the CI checks in a throwaway worktree, and only deletes files inside it. `ReportBasedChecks` infers results from existing reports; a folder with no reports is MISSING
+- [x] `ReviewAnalyzer`, `ReviewReport` (JSON), `MarkdownRenderer` (future PR comment; untrusted text escaped), `FileStateStore` (one analysis per head SHA), `AuditLog` (JSONL, no code)
+- [x] CLI: `pr-review review local --base --head [--reports-dir] [--check name=STATUS] [--out] [--keep-worktree]`
+- [x] Engine CI: `.github/workflows/pr-review-engine.yml` (`engine-tests`)
+- [x] Tests: 80 pass (`mvn -f pr-review/pom.xml package`). Parser, analyzer and CLI tests use real backend reports (sanitised) in `src/test/resources/reports/`
+- [x] **DoD proof (2026-10-15):** `review local --base main --head scratch/phase-2-defective` on this repository took about 2 minutes. The scratch branch concatenated SQL and renamed `paymentMethodName`. The result was NOT_READY from deterministic evidence alone:
+  - R2: all three checks failed.
+  - R5: F-001 SQL injection (FindSecBugs, CWE-89) and F-002–F-004 broken consumer contracts, each naming the missing field.
+  - R7: human approval needed.
+- [x] Contrast run: `review local --base eceb894 --head main` (the merged Phase 0–1 work) gave READY_FOR_HUMAN_APPROVAL. All three checks passed, there were 0 findings, and only R7 fired
+- [ ] Pushed and merged (waiting for the user's go-ahead)
 
 ## Phase 3: AI review + validation
 - [ ] Not started

@@ -28,7 +28,11 @@ Remotes: `origin` is this PoC repo. `upstream` is the real app repo, read-only: 
 - Consumer-contract tests only (web frontend, Android sync): `cd backend && mvn test -Pcontract-tests`. Plain `mvn test` skips them.
 - Coverage: every backend test run writes `backend/target/site/jacoco/jacoco.xml`.
 - Security scan: `cd backend && mvn compile spotbugs:check` (FindSecBugs, security only; filters in `backend/config/spotbugs/`). Reports go to `target/spotbugsXml.xml` and `target/spotbugsSarif.json`.
-- Build the review engine: `mvn -f pr-review/pom.xml package`. Run it: `java -jar pr-review/target/pr-review.jar --version`.
+- Build and test the review engine: `mvn -f pr-review/pom.xml package` (about 80 tests; CI runs them in `pr-review-engine.yml`).
+- Review a local branch as a PR (about 2 minutes, runs the three checks in a throwaway worktree):
+  `java -jar pr-review/target/pr-review.jar review local --base main --head <branch>`. Output goes to `.ai-review/` (gitignored).
+  `--reports-dir <dir>` skips Maven and reads existing reports instead.
+- Engine test fixtures are real backend reports in `pr-review/src/test/resources/reports/`. They are sanitised: machine paths, system properties, logs and hostnames are stripped. Keep it that way when regenerating them, because this repo is public.
 - More PoC commands are added here as each phase lands (see `docs/pr-review/PROGRESS.md`).
 
 ## App conventions
