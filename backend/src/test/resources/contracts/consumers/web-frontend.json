@@ -1,0 +1,173 @@
+{
+  "consumer": "web-frontend",
+  "source": "frontend/src/app/core/api.ts and frontend/src/app/core/auth.service.ts",
+  "notes": [
+    "Fields the Angular screens read, with their JSON types. Extra fields are fine; removing, renaming or retyping one breaks the screens (REQ-API-001).",
+    "Paths: 'a.b' is a field of a field, 'a[]' is every element of array a, '[]' alone is every element of a top-level array.",
+    "Types: string, number, boolean, array, object; 'string|null' allows null. {name} placeholders are filled from the test fixture."
+  ],
+  "endpoints": [
+    {
+      "name": "Current user",
+      "request": {"method": "GET", "path": "/api/auth/me"},
+      "fields": {
+        "username": "string",
+        "roles": "array",
+        "roles[]": "string",
+        "passwordChangeRequired": "boolean"
+      }
+    },
+    {
+      "name": "Master data tree",
+      "request": {"method": "GET", "path": "/api/master-data?includeInactive=true"},
+      "fields": {
+        "[].id": "number",
+        "[].name": "string",
+        "[].isDefault": "boolean",
+        "[].active": "boolean",
+        "[].subCategories": "array",
+        "[].subCategories[].id": "number",
+        "[].subCategories[].name": "string",
+        "[].subCategories[].isDefault": "boolean",
+        "[].subCategories[].active": "boolean",
+        "[].subCategories[].items": "array",
+        "[].subCategories[].items[].id": "number",
+        "[].subCategories[].items[].name": "string",
+        "[].subCategories[].items[].isDefault": "boolean",
+        "[].subCategories[].items[].active": "boolean"
+      }
+    },
+    {
+      "name": "Payment methods",
+      "request": {"method": "GET", "path": "/api/payment-methods"},
+      "fields": {
+        "[].id": "number",
+        "[].name": "string"
+      }
+    },
+    {
+      "name": "Expense list",
+      "request": {"method": "GET", "path": "/api/expenses?page=0&size=20"},
+      "fields": {
+        "content": "array",
+        "content[].id": "number",
+        "content[].amount": "number",
+        "content[].spentAt": "string",
+        "content[].note": "string|null",
+        "content[].categoryId": "number|null",
+        "content[].categoryName": "string|null",
+        "content[].subCategoryId": "number|null",
+        "content[].subCategoryName": "string|null",
+        "content[].itemId": "number",
+        "content[].itemName": "string|null",
+        "content[].paymentMethodId": "number",
+        "content[].paymentMethodName": "string|null",
+        "page": "number",
+        "size": "number",
+        "totalElements": "number"
+      }
+    },
+    {
+      "name": "Create expense",
+      "request": {
+        "method": "POST",
+        "path": "/api/expenses",
+        "status": 201,
+        "body": {"itemId": "{itemId}", "paymentMethodId": "{paymentMethodId}", "amount": 42.5, "spentAt": "2012-08-20T12:15", "note": "Contract check"}
+      },
+      "fields": {
+        "id": "number",
+        "amount": "number",
+        "spentAt": "string",
+        "note": "string|null",
+        "categoryId": "number|null",
+        "categoryName": "string|null",
+        "subCategoryId": "number|null",
+        "subCategoryName": "string|null",
+        "itemId": "number",
+        "itemName": "string|null",
+        "paymentMethodId": "number",
+        "paymentMethodName": "string|null"
+      }
+    },
+    {
+      "name": "Expense summary",
+      "request": {"method": "GET", "path": "/api/expenses/summary"},
+      "fields": {
+        "date": "string",
+        "weekStart": "string",
+        "monthStart": "string",
+        "today": "number",
+        "week": "number",
+        "month": "number"
+      }
+    },
+    {
+      "name": "Month budget",
+      "request": {"method": "GET", "path": "/api/budgets/{month}"},
+      "fields": {
+        "month": "string",
+        "totalBudget": "number",
+        "totalSpent": "number",
+        "unbudgetedSpent": "number",
+        "lines": "array",
+        "lines[].categoryId": "number",
+        "lines[].categoryName": "string",
+        "lines[].categoryActive": "boolean",
+        "lines[].budget": "number|null",
+        "lines[].spent": "number",
+        "lines[].remaining": "number|null"
+      }
+    },
+    {
+      "name": "Set a budget",
+      "request": {"method": "PUT", "path": "/api/budgets/{month}/categories/{categoryId}", "body": {"amount": 700}},
+      "fields": {
+        "month": "string",
+        "totalBudget": "number",
+        "totalSpent": "number",
+        "unbudgetedSpent": "number",
+        "lines[].categoryId": "number",
+        "lines[].budget": "number|null",
+        "lines[].spent": "number",
+        "lines[].remaining": "number|null"
+      }
+    },
+    {
+      "name": "Copy last month's budgets",
+      "request": {"method": "POST", "path": "/api/budgets/{nextMonth}/copy-previous"},
+      "fields": {
+        "copied": "number",
+        "month": "object",
+        "month.month": "string",
+        "month.totalBudget": "number",
+        "month.lines[].categoryId": "number",
+        "month.lines[].budget": "number|null"
+      }
+    },
+    {
+      "name": "Month dashboard",
+      "request": {"method": "GET", "path": "/api/dashboard/{month}"},
+      "fields": {
+        "month": "string",
+        "total": "number",
+        "count": "number",
+        "dailyAverage": "number",
+        "previousSamePeriod": "number",
+        "previousMonthTotal": "number",
+        "days[].date": "string",
+        "days[].total": "number",
+        "recentMonths[].month": "string",
+        "recentMonths[].total": "number",
+        "paymentMethods[].name": "string",
+        "paymentMethods[].total": "number",
+        "paymentMethods[].count": "number",
+        "topItems[].itemId": "number",
+        "topItems[].itemName": "string",
+        "topItems[].categoryName": "string|null",
+        "topItems[].total": "number",
+        "topItems[].count": "number"
+      }
+    }
+  ]
+}

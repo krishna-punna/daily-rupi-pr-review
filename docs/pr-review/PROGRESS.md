@@ -13,16 +13,25 @@ Phases follow `POC_SPEC.md` §18. A box is ticked only when its Definition of Do
   - `java -jar pr-review/target/pr-review.jar --version` prints `pr-review 0.1.0-SNAPSHOT`
 - [x] User approved the Phase 0–1 plan (2026-10-15)
 
-## Phase 1: App tooling + CI checks
-- [ ] `docs/requirements/daily-rupi-requirements.md` (IDs from spec §6.2, checked against code)
-- [ ] Consumer contracts `web-frontend.json` (from `api.ts`) and `android-sync.json` + `ConsumerContractTest` (`@Tag("contract")`)
-- [ ] JaCoCo XML report on `test`
-- [ ] SpotBugs + FindSecBugs (SECURITY only) via `spotbugs:check`; result on `main` reported to the user
-- [ ] Surefire excludes `contract` by default; `-Dgroups=contract` runs them
-- [ ] Proof on a local scratch branch: `SQL_INJECTION_SPRING_JDBC` detected; renamed `paymentMethodName` fails the contract test
-- [ ] `.github/workflows/pr-review.yml` with `backend-tests`, `contract-tests`, `sast` (engine job stubbed)
-- [ ] Existing `mvn test` and `ci.yml` unchanged in behaviour
-- [ ] Pushed and green on GitHub (after user approval)
+## Phase 1: App tooling + CI checks (branch `poc/phase-1-app-tooling`)
+- [x] `docs/requirements/daily-rupi-requirements.md`: 12 IDs from spec §6.2, each with where the code enforces it
+- [x] Consumer contracts `web-frontend.json` (10 endpoints, from `api.ts` + `auth.service.ts`) and `android-sync.json` (3 endpoints) + `ConsumerContractTest` (`@Tag("contract")`)
+  - `mvn test -Pcontract-tests`: 13 checks pass, each reported by name (e.g. `web-frontend: Expense list`)
+- [x] JaCoCo XML report on every `test` run (`backend/target/site/jacoco/jacoco.xml`)
+- [x] Surefire excludes `contract` by default; `-Pcontract-tests` runs only them
+- [x] SpotBugs 4.10.4.1 + FindSecBugs 1.14.0 (SECURITY category, threshold Medium, `SPRING_ENDPOINT` excluded) via `mvn compile spotbugs:check`
+- [x] Existing finding resolved upstream. The scan had reported 1 finding on unchanged app code: `ENTITY_LEAK` (Medium) in `AdminController.auditLog`.
+  - Fixed in the real app by krishna-punna/daily-rupi#11 (merged 2026-10-15): the endpoint returns an `AuditEntry` record with the same six JSON fields.
+  - Brought in by merging `upstream/main` (`eceb894`) into this branch.
+  - After the sync: `mvn test` 35/35 pass, contract checks 13/13 pass, `spotbugs:check` 0 findings, `BUILD SUCCESS`.
+- [x] Proof on a local scratch branch (deleted afterwards):
+  - Concatenated `JdbcTemplate` SQL is reported as `SQL_INJECTION_SPRING_JDBC` (Medium).
+  - Renaming `ExpenseResponse.paymentMethodName` fails exactly 3 contract checks: `web-frontend: Expense list`, `web-frontend: Create expense`, `android-sync: Changes and deletions since a time`.
+- [x] `.github/workflows/pr-review.yml` with `backend-tests`, `contract-tests`, `sast`, and a placeholder `pr-review` job gated to `demo/*` or the `ai-review` label. YAML parsed locally with SnakeYAML; actions pinned to commit SHAs
+- [x] Existing behaviour unchanged:
+  - No diff in `backend/src/main`, `frontend/`, `ci.yml`, `README.md`, or `db/`.
+  - `mvn test` still runs the same 35 tests, all passing.
+- [ ] Pushed and green on GitHub (waiting for the user's go-ahead; nothing pushed yet)
 
 ## Phase 2: Engine core, no LLM
 - [ ] Not started

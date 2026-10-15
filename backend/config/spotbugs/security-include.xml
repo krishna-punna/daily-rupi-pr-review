@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- PR review PoC: the security scan reports security problems only (FindSecBugs and SpotBugs' SECURITY category). -->
+<FindBugsFilter>
+    <Match>
+        <Bug category="SECURITY"/>
+    </Match>
+</FindBugsFilter>

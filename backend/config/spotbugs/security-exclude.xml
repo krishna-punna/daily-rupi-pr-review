@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- PR review PoC: findings left out of the security scan, each with the reason. Keep this list short. -->
+<FindBugsFilter>
+    <!-- Marks every controller method as "a Spring endpoint exists". An inventory note, not a defect. -->
+    <Match>
+        <Bug pattern="SPRING_ENDPOINT"/>
+    </Match>
+</FindBugsFilter>
