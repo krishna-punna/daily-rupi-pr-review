@@ -34,10 +34,14 @@ Each entry: date, decision, why, alternatives considered.
 - **Open:** the five PoC commits made before this change (`07920d9` through `41803af`) are authored as `kittulal`. They are unpushed, so they can be re-authored before the first push if the user wants.
 
 ## 2026-10-15: Bringing upstream app changes into the PoC copy
-- **Decision:** app changes are made in `krishna-punna/daily-rupi`, then merged into this repo with a normal merge commit (never a rebase of pushed branches):
-  1. `git fetch upstream`
-  2. `git switch main`, then `git merge --ff-only upstream/main` (local `main` tracks `upstream/main`)
-  3. Update each open `poc/*` branch with `git merge main`
+- **Decision:** app changes are made in `krishna-punna/daily-rupi`, then merged into this repo with a normal merge commit (never a rebase of pushed branches).
+  - Since Phases 0–1 were merged (2026-10-15), local `main` tracks `origin/main` (the PoC repo), which is ahead of upstream. To bring in app changes:
+    1. `git fetch upstream`
+    2. `git switch -c sync/upstream-<date> origin/main`
+    3. `git merge upstream/main`
+    4. Push and merge it as a normal PR, so the PoC checks run on it
+    5. Merge `main` into any open `poc/*` branch
+  - Before Phases 0–1 were merged, the procedure was `git merge --ff-only upstream/main` on a `main` that tracked upstream.
 - **Why:** the PoC must never diverge from the real app by editing app code, so reviews stay about real code. Merging keeps history intact for branches that are already pushed.
 - **After each sync:** re-run `mvn test`, `mvn test -Pcontract-tests`, and `mvn compile spotbugs:check`. From Phase 4 on, also check the demo overlays (spec §14).
 

@@ -31,10 +31,14 @@ Phases follow `POC_SPEC.md` §18. A box is ticked only when its Definition of Do
 - [x] Existing behaviour unchanged:
   - No diff in `backend/src/main`, `frontend/`, `ci.yml`, `README.md`, or `db/`.
   - `mvn test` still runs the same 35 tests, all passing.
-- [ ] Pushed and green on GitHub (waiting for the user's go-ahead; nothing pushed yet)
+- [x] Pushed and green on GitHub. Merged as PR #2 on 2026-10-15.
+  - First `PR review` run (head `7b4f76d`): `backend-tests`, `contract-tests`, and `sast` all succeeded and uploaded their reports.
+  - `pr-review` was skipped as designed (not a `demo/*` branch, no `ai-review` label).
 
-## Phase 2: Engine core, no LLM
-- [ ] Not started
+**Phase 0 merged as PR #1, Phase 1 as PR #2 (2026-10-15).** Before the first push, every PoC commit was re-authored as `krishna-punna` and Phase 1 was rebased onto `main`.
+
+## Phase 2: Engine core, no LLM (branch `poc/phase-2-engine-core`)
+- [ ] Not started. Waiting for the user's "continue"
 
 ## Phase 3: AI review + validation
 - [ ] Not started
