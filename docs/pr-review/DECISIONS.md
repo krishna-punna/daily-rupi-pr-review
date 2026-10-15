@@ -14,6 +14,12 @@ Each entry: date, decision, why, alternatives considered.
   - An engine-only repo that reviews `daily-rupi` across repos (more plumbing: tokens, versioning).
 - **Consequence:** the app code here is a snapshot. To pick up later app changes, merge `upstream/main` deliberately and regenerate the demo overlays (spec §14).
 
+## 2026-10-15: Requirement wording checked against the code
+- **Decision:** `docs/requirements/daily-rupi-requirements.md` keeps the 12 IDs from spec §6.2 and adds an "Enforced in" column. Two wordings are more precise than the spec:
+  - REQ-SEC-002 also lists `POST /api/auth/login` (the form-login endpoint) as reachable without logging in, and says the rest of `/api/auth/**` needs any logged-in user, not the USER role.
+  - REQ-API-001 also covers `core/auth.service.ts` (`GET /api/auth/me`).
+- **Why:** that is what `SecurityConfig` and the frontend actually do. A requirement that disagrees with the code would make the reviewer flag correct code.
+
 ## 2026-10-15: Java 17 baseline for the engine
 - **Decision:** `pr-review/` targets Java 17, the same as `backend/`.
 - **Why:** the machine has JDK 17.0.12 only, and CI already uses 17. One JDK is enough.

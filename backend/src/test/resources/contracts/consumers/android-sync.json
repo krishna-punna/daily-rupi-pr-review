@@ -1,0 +1,63 @@
+{
+  "consumer": "android-sync",
+  "source": "ExpenseDtos.ExpenseChanges and ExpenseResponse as of upstream a1478b2. The Android app (app-rupi) is not in this repository, so this contract is inferred from the current DTOs.",
+  "notes": [
+    "What the phone reads when it syncs expenses (REQ-API-001, REQ-EXP-004). Same path and type rules as web-frontend.json."
+  ],
+  "endpoints": [
+    {
+      "name": "First full fetch from a day",
+      "request": {"method": "GET", "path": "/api/expenses/changes?from={from}"},
+      "fields": {
+        "nextSince": "string",
+        "expenses": "array",
+        "expenses[].id": "number",
+        "expenses[].amount": "number",
+        "expenses[].spentAt": "string",
+        "expenses[].itemId": "number",
+        "expenses[].paymentMethodId": "number",
+        "expenses[].updatedAt": "string",
+        "deleted": "array"
+      }
+    },
+    {
+      "name": "Changes and deletions since a time",
+      "request": {"method": "GET", "path": "/api/expenses/changes?since={since}"},
+      "fields": {
+        "nextSince": "string",
+        "expenses[].id": "number",
+        "expenses[].amount": "number",
+        "expenses[].spentAt": "string",
+        "expenses[].note": "string|null",
+        "expenses[].categoryId": "number|null",
+        "expenses[].categoryName": "string|null",
+        "expenses[].subCategoryId": "number|null",
+        "expenses[].subCategoryName": "string|null",
+        "expenses[].itemId": "number",
+        "expenses[].itemName": "string|null",
+        "expenses[].paymentMethodId": "number",
+        "expenses[].paymentMethodName": "string|null",
+        "expenses[].clientId": "string|null",
+        "expenses[].updatedAt": "string",
+        "deleted[].id": "number",
+        "deleted[].clientId": "string|null"
+      }
+    },
+    {
+      "name": "Create with a client id",
+      "request": {
+        "method": "POST",
+        "path": "/api/expenses",
+        "status": 201,
+        "body": {"itemId": "{itemId}", "paymentMethodId": "{paymentMethodId}", "amount": 15, "spentAt": "2012-08-21T08:05", "note": null, "clientId": "{clientId}"}
+      },
+      "fields": {
+        "id": "number",
+        "amount": "number",
+        "spentAt": "string",
+        "clientId": "string",
+        "updatedAt": "string"
+      }
+    }
+  ]
+}
