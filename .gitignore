@@ -17,3 +17,7 @@ frontend/.angular/
 *.iml
 .vscode/
 .DS_Store
+
+# PR review PoC
+pr-review/target/
+.ai-review/
